@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { IAnimal } from "../models/IAnimal";
 import logo192 from "../assets/logo192.png";
 import { StyledImage } from "./StyledComponents/Images";
-import { Button } from "./StyledComponents/Button";
+import { StyledWrapper, FlexCWrapper } from "./StyledComponents/Wrappers";
 
 export const Animals = () => {
   const [animals, setAnimals] = useState<IAnimal[]>([]);
@@ -23,6 +23,8 @@ export const Animals = () => {
     }
   }, []);
 
+  //// lägg denna i en utils??
+
   const imageOnErrorHandler = (
     event: React.SyntheticEvent<HTMLImageElement, Event>
   ) => {
@@ -31,25 +33,21 @@ export const Animals = () => {
   };
 
   return (
-    <>
-      <div>
-        {animals.map((animal) => {
-          return (
-            <div key={animal.id}>
-              <StyledImage
-                onError={imageOnErrorHandler}
-                src={animal.imageUrl}
-                alt={animal.name}
-              />
-              <Link to={`/animals/${animal.id}`}>{animal.name}</Link>
-              <p>{animal.shortDescription}</p>
-              <Button background='red' color='pink'>
-                Mata djuret
-              </Button>
-            </div>
-          );
-        })}
-      </div>
-    </>
+    <StyledWrapper>
+      {animals.map((animal) => {
+        return (
+          <FlexCWrapper key={animal.id}>
+            <StyledImage
+              onError={imageOnErrorHandler}
+              src={animal.imageUrl}
+              alt={animal.name}
+            />
+            <Link to={`/animals/${animal.id}`}>{animal.name}</Link>
+
+            <p>{animal.shortDescription}</p>
+          </FlexCWrapper>
+        );
+      })}
+    </StyledWrapper>
   );
 };

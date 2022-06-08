@@ -10,4 +10,8 @@ export const Button = styled.button`
   background-color: ${(props: IButtonProps) => props.background || "white"};
   border: none;
   border-radius: 5px;
+
+  :hover {
+    cursor: pointer;
+  }
 `;

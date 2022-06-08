@@ -1,25 +1,23 @@
 import { Link, Outlet } from "react-router-dom";
 import { Footer } from "./partials/Footer";
+import { Header } from "./partials/Header";
+import { StyledUl } from "./StyledComponents/Ul";
+import { AppWrapper } from "./StyledComponents/Wrappers";
 
 export const Layout = () => {
   return (
-    <div className='layout-container'>
-      <header>
-        <nav>
-          <ul>
-            <li>
-              <Link to='/'>Hem</Link>
-            </li>
-            <li>
-              <Link to='/about'>Om Jullans zoo</Link>
-            </li>
-          </ul>
-        </nav>
-      </header>
-      <main>
-        <Outlet></Outlet>
-      </main>
+    <AppWrapper>
+      <Header />
+      <StyledUl>
+        <li>
+          <Link to='/'>Hem</Link>
+        </li>
+        <li>
+          <Link to='/about'>Om Jullans zoo</Link>
+        </li>
+      </StyledUl>
+      <Outlet></Outlet>
       <Footer />
-    </div>
+    </AppWrapper>
   );
 };
