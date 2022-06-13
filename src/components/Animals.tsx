@@ -1,53 +1,34 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { IAnimal } from "../models/IAnimal";
-import logo192 from "../assets/logo192.png";
+import onErrorImg from "../assets/OnError.png";
 import { StyledImage } from "./StyledComponents/Images";
-import { StyledWrapper, FlexCWrapper } from "./StyledComponents/Wrappers";
+import { FlexDiv } from "./StyledComponents/Wrappers";
+import { IState } from "../redux/models/IState";
 
 export const Animals = () => {
-  const [animals, setAnimals] = useState<IAnimal[]>([]);
-
-  useEffect(() => {
-    const storedAnimals = localStorage.getItem("animals");
-    if (storedAnimals) {
-      setAnimals(JSON.parse(storedAnimals));
-    } else if (!storedAnimals) {
-      axios
-        .get<IAnimal[]>("https://animals.azurewebsites.net/api/animals")
-        .then((response) => {
-          setAnimals(response.data);
-          localStorage.setItem("animals", JSON.stringify(response.data));
-        });
-    }
-  }, []);
-
-  //// lägg denna i en utils??
+  const animals = useSelector((state: IState) => state.animals.value);
 
   const imageOnErrorHandler = (
     event: React.SyntheticEvent<HTMLImageElement, Event>
   ) => {
-    event.currentTarget.src = logo192;
-    event.currentTarget.className = "error";
+    event.currentTarget.src = onErrorImg;
   };
 
   return (
-    <StyledWrapper>
+    <FlexDiv dir={"column"}>
       {animals.map((animal) => {
         return (
-          <FlexCWrapper key={animal.id}>
+          <FlexDiv dir={"column"} key={animal.id}>
             <StyledImage
               onError={imageOnErrorHandler}
               src={animal.imageUrl}
               alt={animal.name}
             />
             <Link to={`/animals/${animal.id}`}>{animal.name}</Link>
-
             <p>{animal.shortDescription}</p>
-          </FlexCWrapper>
+          </FlexDiv>
         );
       })}
-    </StyledWrapper>
+    </FlexDiv>
   );
 };

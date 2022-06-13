@@ -1,6 +1,23 @@
 import styled from "styled-components";
 import { colors } from "./Mixins";
 
+interface IFlexDivProps {
+  dir?: string;
+  align?: string;
+  justify?: string;
+  wrap?: string;
+  background?: string;
+}
+
+export const FlexDiv = styled.div`
+  display: flex;
+  flex-direction: ${(props: IFlexDivProps) => props.dir || "row"};
+  align-items: ${(props: IFlexDivProps) => props.align || "center"};
+  justify-content: ${(props: IFlexDivProps) => props.justify || "center"};
+  flex-wrap: ${(props: IFlexDivProps) => props.wrap || "nowrap"};
+  background-color: ${(props: IFlexDivProps) => props.justify || "none"};
+`;
+
 export const AppWrapper = styled.div`
   background-color: ${colors.GreenLight};
   display: flex;

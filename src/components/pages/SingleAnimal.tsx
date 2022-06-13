@@ -3,7 +3,9 @@ import { IAnimal } from "../../models/IAnimal";
 import { useState, useEffect } from "react";
 import { Button } from "../StyledComponents/Button";
 import { StyledImage } from "../StyledComponents/Images";
-import logo192 from "../../assets/logo192.png";
+import onErrorImg from "../../assets/OnError.png";
+import { useDispatch } from "react-redux";
+import { feedAnimal } from "../../redux/features/AnimalSlice";
 
 export const SingleAnimal = () => {
   const [animal, setAnimal] = useState<IAnimal>({
@@ -20,11 +22,10 @@ export const SingleAnimal = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isFed, setIsFed] = useState(false);
-  let params = useParams();
+  const params = useParams();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("körs");
-
     const storedAnimals = JSON.parse(localStorage.getItem("animals") || "");
     for (let i = 0; i < storedAnimals.length; i++) {
       if (storedAnimals[i].id == params.id) {
@@ -38,16 +39,8 @@ export const SingleAnimal = () => {
   const imageOnErrorHandler = (
     event: React.SyntheticEvent<HTMLImageElement, Event>
   ) => {
-    event.currentTarget.src = logo192;
+    event.currentTarget.src = onErrorImg;
     event.currentTarget.className = "error";
-  };
-
-  const feedAnimal = () => {
-    animal.isFed = true;
-    const date = Date.now().toString();
-    animal.lastFed = date;
-    console.log(animal);
-    setIsFed(true);
   };
 
   return (
@@ -59,8 +52,7 @@ export const SingleAnimal = () => {
           <Button>
             <Link to='/'>Tillbaka</Link>
           </Button>
-          {/* Rimligt eller onödigt? */}
-          <h3>{animal.name ? animal.name : "Ingen info"}</h3>
+          <h3>{animal.name}</h3>
           <p>{animal.longDescription}</p>
           <p>Född: {animal.yearOfBirth}</p>
           <p>Mediciner: {animal.medicine}</p>
@@ -76,7 +68,13 @@ export const SingleAnimal = () => {
               Redan matat
             </Button>
           ) : (
-            <Button background='green' color='pink' onClick={feedAnimal}>
+            <Button
+              background='green'
+              color='pink'
+              onClick={() => {
+                dispatch(feedAnimal(animal.id));
+              }}
+            >
               Mata djuret
             </Button>
           )}
