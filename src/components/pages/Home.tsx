@@ -1,6 +1,6 @@
 import { Animals } from "../Animals";
-import { StyledHeading } from "../StyledComponents/Headings";
-import { StyledWrapper } from "../StyledComponents/Wrappers";
+import { StyledHeading } from "../StyledComponents/Texts";
+import { FlexDiv } from "../StyledComponents/Wrappers";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { getList } from "../../services/StorageService";
@@ -28,10 +28,10 @@ export const Home = () => {
 
   return (
     <>
-      <StyledWrapper>
+      <FlexDiv dir='column'>
         <StyledHeading>Våra djur</StyledHeading>
         <Animals />
-      </StyledWrapper>
+      </FlexDiv>
     </>
   );
 };

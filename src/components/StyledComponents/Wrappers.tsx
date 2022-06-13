@@ -7,6 +7,12 @@ interface IFlexDivProps {
   justify?: string;
   wrap?: string;
   background?: string;
+  width?: string;
+  height?: string;
+  gap?: string;
+  margin?: string;
+  padding?: string;
+  borderRad?: string;
 }
 
 export const FlexDiv = styled.div`
@@ -15,7 +21,13 @@ export const FlexDiv = styled.div`
   align-items: ${(props: IFlexDivProps) => props.align || "center"};
   justify-content: ${(props: IFlexDivProps) => props.justify || "center"};
   flex-wrap: ${(props: IFlexDivProps) => props.wrap || "nowrap"};
-  background-color: ${(props: IFlexDivProps) => props.justify || "none"};
+  background-color: ${(props: IFlexDivProps) => props.background || "none"};
+  width: ${(props: IFlexDivProps) => props.width || "100%"};
+  height: ${(props: IFlexDivProps) => props.height || "100%"};
+  gap: ${(props: IFlexDivProps) => props.gap || "0"};
+  margin: ${(props: IFlexDivProps) => props.margin || "0"};
+  padding: ${(props: IFlexDivProps) => props.padding || "0"};
+  border-radius: ${(props: IFlexDivProps) => props.borderRad || "0"};
 `;
 
 export const AppWrapper = styled.div`
@@ -27,22 +39,4 @@ export const AppWrapper = styled.div`
   font-family: "Mukta", sans-serif;
   margin: 0;
   padding: 0;
-`;
-
-export const StyledWrapper = styled.div`
-  background-color: ${colors.GreenMedium};
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  text-align: center;
-  width: 80%;
-  gap: 10px;
-`;
-
-export const FlexCWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 10px;
 `;

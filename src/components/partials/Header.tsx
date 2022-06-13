@@ -1,4 +1,4 @@
-import { StyledTopHeading } from "../StyledComponents/Headings";
+import { StyledTopHeading } from "../StyledComponents/Texts";
 export const Header = () => {
   return (
     <header>

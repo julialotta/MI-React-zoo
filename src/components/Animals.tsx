@@ -4,6 +4,7 @@ import onErrorImg from "../assets/OnError.png";
 import { StyledImage } from "./StyledComponents/Images";
 import { FlexDiv } from "./StyledComponents/Wrappers";
 import { IState } from "../redux/models/IState";
+import { StyledLinkDiv, StyledP } from "./StyledComponents/Texts";
 
 export const Animals = () => {
   const animals = useSelector((state: IState) => state.animals.value);
@@ -15,17 +16,31 @@ export const Animals = () => {
   };
 
   return (
-    <FlexDiv dir={"column"}>
+    <FlexDiv wrap={"wrap"} gap={"20px"} width={"100%"}>
       {animals.map((animal) => {
         return (
-          <FlexDiv dir={"column"} key={animal.id}>
-            <StyledImage
-              onError={imageOnErrorHandler}
-              src={animal.imageUrl}
-              alt={animal.name}
-            />
-            <Link to={`/animals/${animal.id}`}>{animal.name}</Link>
-            <p>{animal.shortDescription}</p>
+          <FlexDiv
+            width={"25%"}
+            height={"400px"}
+            dir={"column"}
+            background={"#6b7b5d"}
+            key={animal.id}
+            margin={"5px"}
+            padding={"25px"}
+            borderRad={"5px"}
+            justify={"start"}
+          >
+            <Link to={`/animals/${animal.id}`}>
+              <StyledImage
+                onError={imageOnErrorHandler}
+                src={animal.imageUrl}
+                alt={animal.name}
+              />
+            </Link>
+            <StyledLinkDiv>
+              <Link to={`/animals/${animal.id}`}>{animal.name}</Link>
+            </StyledLinkDiv>
+            <StyledP>{animal.shortDescription}</StyledP>
           </FlexDiv>
         );
       })}

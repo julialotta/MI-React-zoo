@@ -1,4 +1,4 @@
-import { StyledHeading } from "../StyledComponents/Headings";
+import { StyledHeading } from "../StyledComponents/Texts";
 export const Footer = () => {
   return (
     <>

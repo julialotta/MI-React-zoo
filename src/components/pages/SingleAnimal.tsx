@@ -9,6 +9,8 @@ import { feedAnimal } from "../../redux/features/AnimalSlice";
 import { getList } from "../../services/StorageService";
 import axios from "axios";
 import { set } from "../../redux/features/AnimalSlice";
+import { StyledHeading } from "../StyledComponents/Texts";
+import { StyledP } from "../StyledComponents/Texts";
 
 export const SingleAnimal = () => {
   const [animal, setAnimal] = useState<IAnimal>({
@@ -84,20 +86,24 @@ export const SingleAnimal = () => {
         <>Laddar...</>
       ) : (
         <>
-          <Button>
+          <Button color='red'>
             <Link to='/'>Tillbaka</Link>
           </Button>
-          <h3>{animal.name}</h3>
-          <p>{animal.longDescription}</p>
-          <p>Född: {animal.yearOfBirth}</p>
-          <p>Ålder: {new Date().getFullYear() - animal.yearOfBirth} år</p>
-          <p>Mediciner: {animal.medicine}</p>
-          <p>Fick senast mat: {new Date(animal.lastFed).toLocaleString()}</p>
-          <p>
+          <StyledHeading>{animal.name}</StyledHeading>
+          <StyledP>{animal.longDescription}</StyledP>
+          <StyledP>Född: {animal.yearOfBirth}</StyledP>
+          <StyledP>
+            Ålder: {new Date().getFullYear() - animal.yearOfBirth} år
+          </StyledP>
+          <StyledP>Mediciner: {animal.medicine}</StyledP>
+          <StyledP>
+            Fick senast mat: {new Date(animal.lastFed).toLocaleString()}
+          </StyledP>
+          <StyledP>
             Tid sedan mat: {days} dagar, {hours} timmar, {mins} minuter och{" "}
             {seconds} sekunder.
-          </p>
-          <p>Latin: {animal.latinName}</p>
+          </StyledP>
+          <StyledP>Latin: {animal.latinName}</StyledP>
           <StyledImage
             onError={imageOnErrorHandler}
             src={animal.imageUrl}

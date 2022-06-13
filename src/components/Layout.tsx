@@ -13,7 +13,7 @@ export const Layout = () => {
           <Link to='/'>Hem</Link>
         </li>
         <li>
-          <Link to='/about'>Om Jullans zoo</Link>
+          <Link to='/about'>Om Lottas Zoo</Link>
         </li>
       </StyledUl>
       <Outlet></Outlet>
