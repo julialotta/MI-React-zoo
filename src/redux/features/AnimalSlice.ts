@@ -19,6 +19,14 @@ const animalSlice = createSlice({
         }
       }
     },
+    unFeedAnimal: (state, action: IAction<number>) => {
+      for (let i = 0; i < state.value.length; i++) {
+        if (state.value[i].id === action.payload) {
+          state.value[i].isFed = false;
+          save(state.value);
+        }
+      }
+    },
     set: (state, action: IAction<IAnimal[]>) => {
       state.value = action.payload;
       save(state.value);
@@ -26,5 +34,5 @@ const animalSlice = createSlice({
   },
 });
 
-export const { feedAnimal, set } = animalSlice.actions;
+export const { feedAnimal, set, unFeedAnimal } = animalSlice.actions;
 export default animalSlice.reducer;

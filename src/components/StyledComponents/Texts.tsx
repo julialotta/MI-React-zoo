@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import { colors } from "./Mixins";
 
+interface IPProps {
+  margin?: string;
+}
+
 export const StyledTopHeading = styled.h1`
   a {
     font-family: "Bebas Neue", cursive;
@@ -30,6 +34,7 @@ export const StyledHeadingh5 = styled.h5`
 export const StyledP = styled.p`
   font-family: "Mukta", sans-serif;
   text-align: center;
+  margin: ${(props: IPProps) => props.margin || "5px"};
 `;
 
 export const StyledLinkDiv = styled.div`

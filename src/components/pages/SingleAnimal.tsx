@@ -5,12 +5,14 @@ import { Button } from "../StyledComponents/Button";
 import { StyledImage } from "../StyledComponents/Images";
 import onErrorImg from "../../assets/OnError.png";
 import { useDispatch } from "react-redux";
-import { feedAnimal } from "../../redux/features/AnimalSlice";
+import { feedAnimal, unFeedAnimal } from "../../redux/features/AnimalSlice";
 import { getList } from "../../services/StorageService";
 import axios from "axios";
 import { set } from "../../redux/features/AnimalSlice";
-import { StyledHeadingh3 } from "../StyledComponents/Texts";
+import { StyledHeadingh3, StyledLinkDiv } from "../StyledComponents/Texts";
 import { StyledP } from "../StyledComponents/Texts";
+import { FlexDiv } from "../StyledComponents/Wrappers";
+import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 
 export const SingleAnimal = () => {
   const [animal, setAnimal] = useState<IAnimal>({
@@ -54,10 +56,26 @@ export const SingleAnimal = () => {
     }
   }, [isFed, animals]);
 
+  useEffect(() => {
+    const now = new Date();
+    const lastFedDate = new Date(animal.lastFed);
+    const timeSpan = now.getTime() - lastFedDate.getTime();
+    const hour = 1000 * 60 * 60;
+    const day = hour * 24;
+    const hours = Math.floor((timeSpan % day) / hour);
+    console.log(hours);
+
+    if (hours >= 3) {
+      dispatch(unFeedAnimal(animal.id));
+      setIsFed(false);
+    }
+  }, [animal]);
+
   function setTimer() {
     const now = new Date();
     const lastFedDate = new Date(animal.lastFed);
     const timeSpan = now.getTime() - lastFedDate.getTime();
+
     const second = 1000;
     const minute = second * 60;
     const hour = minute * 60;
@@ -77,7 +95,6 @@ export const SingleAnimal = () => {
     event: React.SyntheticEvent<HTMLImageElement, Event>
   ) => {
     event.currentTarget.src = onErrorImg;
-    event.currentTarget.className = "error";
   };
 
   return (
@@ -85,10 +102,17 @@ export const SingleAnimal = () => {
       {isLoading ? (
         <>Laddar...</>
       ) : (
-        <>
-          <Button color='red'>
-            <Link to='/'>Tillbaka</Link>
-          </Button>
+        <FlexDiv dir='column' width='70%'>
+          <StyledLinkDiv>
+            <Link to='/'>
+              <BsFillArrowLeftCircleFill />
+            </Link>
+          </StyledLinkDiv>
+          <StyledImage
+            onError={imageOnErrorHandler}
+            src={animal.imageUrl}
+            alt={animal.name}
+          />
           <StyledHeadingh3>{animal.name}</StyledHeadingh3>
           <StyledP>{animal.longDescription}</StyledP>
           <StyledP>Född: {animal.yearOfBirth}</StyledP>
@@ -104,14 +128,10 @@ export const SingleAnimal = () => {
             {seconds} sekunder.
           </StyledP>
           <StyledP>Latin: {animal.latinName}</StyledP>
-          <StyledImage
-            onError={imageOnErrorHandler}
-            src={animal.imageUrl}
-            alt={animal.name}
-          />
+
           {animal.isFed ? (
-            <Button background='red' color='pink'>
-              Redan matat
+            <Button background='#6b7b5d' color='#d6d3d1' hover=' unset'>
+              Djuret har fått mat
             </Button>
           ) : (
             <Button
@@ -125,7 +145,7 @@ export const SingleAnimal = () => {
               Mata djuret
             </Button>
           )}
-        </>
+        </FlexDiv>
       )}
     </>
   );
