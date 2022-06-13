@@ -1,5 +1,5 @@
 import { Animals } from "../Animals";
-import { StyledHeading } from "../StyledComponents/Texts";
+import { StyledHeadingh3 } from "../StyledComponents/Texts";
 import { FlexDiv } from "../StyledComponents/Wrappers";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
@@ -29,7 +29,7 @@ export const Home = () => {
   return (
     <>
       <FlexDiv dir='column'>
-        <StyledHeading>Våra djur</StyledHeading>
+        <StyledHeadingh3>Våra djur</StyledHeadingh3>
         <Animals />
       </FlexDiv>
     </>

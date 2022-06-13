@@ -9,7 +9,7 @@ import { feedAnimal } from "../../redux/features/AnimalSlice";
 import { getList } from "../../services/StorageService";
 import axios from "axios";
 import { set } from "../../redux/features/AnimalSlice";
-import { StyledHeading } from "../StyledComponents/Texts";
+import { StyledHeadingh3 } from "../StyledComponents/Texts";
 import { StyledP } from "../StyledComponents/Texts";
 
 export const SingleAnimal = () => {
@@ -89,7 +89,7 @@ export const SingleAnimal = () => {
           <Button color='red'>
             <Link to='/'>Tillbaka</Link>
           </Button>
-          <StyledHeading>{animal.name}</StyledHeading>
+          <StyledHeadingh3>{animal.name}</StyledHeadingh3>
           <StyledP>{animal.longDescription}</StyledP>
           <StyledP>Född: {animal.yearOfBirth}</StyledP>
           <StyledP>

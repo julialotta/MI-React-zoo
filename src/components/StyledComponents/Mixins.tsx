@@ -3,4 +3,5 @@ export const colors = {
   GreenLight: "#bac4b7",
   GreenMedium: "#8b9883",
   GreenDark: "#6b7b5d",
+  GreenVeryDark: "#515d46",
 };

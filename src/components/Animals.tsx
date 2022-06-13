@@ -23,7 +23,7 @@ export const Animals = () => {
             width={"25%"}
             height={"400px"}
             dir={"column"}
-            background={"#6b7b5d"}
+            background={"#8b9883"}
             key={animal.id}
             margin={"5px"}
             padding={"25px"}

@@ -5,4 +5,5 @@ export const StyledImage = styled.img`
   height: 180px;
   object-fit: cover;
   border-radius: 50%;
+  filter: brightness(90%) contrast(75%);
 `;
