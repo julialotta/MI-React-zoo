@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { stat } from "fs";
 import { IAnimal } from "../../models/IAnimal";
 import { getList, save } from "../../services/StorageService";
 import { IAction } from "../models/IAction";

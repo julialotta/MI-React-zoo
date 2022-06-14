@@ -15,7 +15,7 @@ export const Home = () => {
 
   useEffect(() => {
     const LSAnimals = getList();
-    if (LSAnimals.length == 0) {
+    if (LSAnimals.length === 0) {
       axios
         .get<IAnimal[]>("https://animals.azurewebsites.net/api/animals")
         .then((response) => {

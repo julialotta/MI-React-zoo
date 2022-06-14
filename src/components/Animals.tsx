@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import onErrorImg from "../assets/OnError.png";
 import { StyledImage } from "./StyledComponents/Images";

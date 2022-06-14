@@ -21,7 +21,7 @@ export const Button = styled.button`
   height: ${(props: IButtonProps) => props.height || "40px"};
   border: none;
   border-radius: 5px;
-
+  font-family: "Mukta", sans-serif;
   :hover {
     background-color: ${(props: IButtonProps) =>
       props.hoverBackground || colors.GreyLight};

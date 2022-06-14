@@ -13,6 +13,7 @@ import { StyledHeadingh3, StyledLinkDiv } from "../StyledComponents/Texts";
 import { StyledP } from "../StyledComponents/Texts";
 import { FlexDiv } from "../StyledComponents/Wrappers";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
+import Modal from "react-modal";
 
 export const SingleAnimal = () => {
   const [animal, setAnimal] = useState<IAnimal>({
@@ -34,9 +35,12 @@ export const SingleAnimal = () => {
   const [mins, setMins] = useState(0);
   const [hours, setHours] = useState(0);
   const [days, setDays] = useState(0);
+  const [modalIsOpen, setIsOpen] = useState(false);
+
   const params = useParams();
   const dispatch = useDispatch();
   let interval: NodeJS.Timer;
+  Modal.setAppElement("#root");
 
   useEffect(() => {
     let storedAnimals: IAnimal[] = getList<IAnimal>();
@@ -62,33 +66,31 @@ export const SingleAnimal = () => {
     const lastFedDate = new Date(animal.lastFed);
     const timeSpan = now.getTime() - lastFedDate.getTime();
     const hour = 1000 * 60 * 60;
-    const day = hour * 24;
-    const hours = Math.floor((timeSpan % day) / hour);
 
-    if (hours >= 3) {
+    if (timeSpan > hour * 3) {
       dispatch(unFeedAnimal(animal.id));
       setIsFed(false);
-      clearInterval(interval);
     }
-  }, [animal, hours]);
+    if (timeSpan > hour * 4) {
+      setIsOpen(true);
+    }
+  }, [animal]);
 
   function setTimer() {
-    const now = new Date();
-    const lastFedDate = new Date(animal.lastFed);
-    const timeSpan = now.getTime() - lastFedDate.getTime();
+    const timeSpan = new Date().getTime() - new Date(animal.lastFed).getTime();
     const minute = 1000 * 60;
     const hour = minute * 60;
     const day = hour * 24;
-    const days = Math.floor(timeSpan / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeSpan % day) / hour);
-    const minutes = Math.floor((timeSpan % hour) / minute);
     const seconds = Math.floor((timeSpan % minute) / 1000);
+    const minutes = Math.floor((timeSpan % hour) / minute);
+    const hours = Math.floor((timeSpan % day) / hour);
+    const days = Math.floor(timeSpan / (1000 * 60 * 60 * 24));
     setMins(minutes);
     setSeconds(seconds);
     setHours(hours);
     setDays(days);
   }
-  setInterval(setTimer, 1000);
+  interval = setInterval(setTimer, 1000);
 
   const imageOnErrorHandler = (
     event: React.SyntheticEvent<HTMLImageElement, Event>
@@ -96,12 +98,57 @@ export const SingleAnimal = () => {
     event.currentTarget.src = onErrorImg;
   };
 
+  function closeModal() {
+    setIsOpen(false);
+  }
+  function feedSingleAnimal() {
+    setIsFed(true);
+    dispatch(feedAnimal(animal.id));
+    setIsOpen(false);
+    clearInterval(interval);
+  }
+
   return (
     <>
       {isLoading ? (
         <>Laddar...</>
       ) : (
         <FlexDiv dir='column' width='70%'>
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            style={customStyles}
+            contentLabel='Example Modal'
+          >
+            <FlexDiv
+              dir='column'
+              width='100%'
+              height='min-content'
+              justify='center'
+              align='center'
+            >
+              <Button
+                width='90px'
+                hoverBackground='#6b7b5d'
+                hoverColor='none'
+                onClick={closeModal}
+              >
+                ✕
+              </Button>
+              <StyledHeadingh3>
+                Hej, jag heter {animal.name} och jag är hungrig!
+              </StyledHeadingh3>
+              <Button
+                hoverBackground='#6b7b5d'
+                hoverColor='#d6d3d1'
+                onClick={feedSingleAnimal}
+              >
+                {" "}
+                Mata {animal.name}
+              </Button>
+            </FlexDiv>
+          </Modal>
+
           <FlexDiv margin='30px'>
             <StyledLinkDiv>
               <Link to='/'>
@@ -138,20 +185,28 @@ export const SingleAnimal = () => {
               hoverBackground='none'
               hoverColor='none'
             >
-              Djuret har fått mat
+              {animal.name} har fått mat
             </Button>
           ) : (
-            <Button
-              onClick={() => {
-                dispatch(feedAnimal(animal.id));
-                setIsFed(true);
-              }}
-            >
-              Mata djuret
-            </Button>
+            <Button onClick={feedSingleAnimal}>Mata {animal.name}</Button>
           )}
         </FlexDiv>
       )}
     </>
   );
+};
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "#d6d3d1",
+    color: "#515d46",
+    border: "none",
+    padding: "40px",
+  },
 };
