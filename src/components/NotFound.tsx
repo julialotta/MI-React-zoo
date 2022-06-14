@@ -1,3 +1,9 @@
+import { FlexDiv } from "./StyledComponents/Wrappers";
+
 export const NotFound = () => {
-  return <>Hoppsan! Nu blev det fel.</>;
+  return (
+    <FlexDiv height='50vh' align={"start"}>
+      Hoppsan! Nu blev det fel
+    </FlexDiv>
+  );
 };

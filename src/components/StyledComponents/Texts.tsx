@@ -34,6 +34,7 @@ export const StyledHeadingh5 = styled.h5`
 export const StyledP = styled.p`
   font-family: "Mukta", sans-serif;
   text-align: center;
+  line-height: 22px;
   margin: ${(props: IPProps) => props.margin || "5px"};
 `;
 

@@ -28,7 +28,7 @@ export const Home = () => {
 
   return (
     <>
-      <FlexDiv dir='column'>
+      <FlexDiv dir='column' width='100%'>
         <StyledHeadingh3>Våra djur</StyledHeadingh3>
         <Animals />
       </FlexDiv>

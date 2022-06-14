@@ -36,6 +36,7 @@ export const SingleAnimal = () => {
   const [days, setDays] = useState(0);
   const params = useParams();
   const dispatch = useDispatch();
+  let interval: NodeJS.Timer;
 
   useEffect(() => {
     let storedAnimals: IAnimal[] = getList<IAnimal>();
@@ -63,27 +64,25 @@ export const SingleAnimal = () => {
     const hour = 1000 * 60 * 60;
     const day = hour * 24;
     const hours = Math.floor((timeSpan % day) / hour);
-    console.log(hours);
 
     if (hours >= 3) {
       dispatch(unFeedAnimal(animal.id));
       setIsFed(false);
+      clearInterval(interval);
     }
-  }, [animal]);
+  }, [animal, hours]);
 
   function setTimer() {
     const now = new Date();
     const lastFedDate = new Date(animal.lastFed);
     const timeSpan = now.getTime() - lastFedDate.getTime();
-
-    const second = 1000;
-    const minute = second * 60;
+    const minute = 1000 * 60;
     const hour = minute * 60;
     const day = hour * 24;
     const days = Math.floor(timeSpan / (1000 * 60 * 60 * 24));
     const hours = Math.floor((timeSpan % day) / hour);
     const minutes = Math.floor((timeSpan % hour) / minute);
-    const seconds = Math.floor((timeSpan % minute) / second);
+    const seconds = Math.floor((timeSpan % minute) / 1000);
     setMins(minutes);
     setSeconds(seconds);
     setHours(hours);
@@ -103,11 +102,13 @@ export const SingleAnimal = () => {
         <>Laddar...</>
       ) : (
         <FlexDiv dir='column' width='70%'>
-          <StyledLinkDiv>
-            <Link to='/'>
-              <BsFillArrowLeftCircleFill />
-            </Link>
-          </StyledLinkDiv>
+          <FlexDiv margin='30px'>
+            <StyledLinkDiv>
+              <Link to='/'>
+                <BsFillArrowLeftCircleFill />
+              </Link>
+            </StyledLinkDiv>
+          </FlexDiv>
           <StyledImage
             onError={imageOnErrorHandler}
             src={animal.imageUrl}
@@ -130,13 +131,17 @@ export const SingleAnimal = () => {
           <StyledP>Latin: {animal.latinName}</StyledP>
 
           {animal.isFed ? (
-            <Button background='#6b7b5d' color='#d6d3d1' hover=' unset'>
+            <Button
+              background='#6b7b5d'
+              color='#d6d3d1'
+              hover=' unset'
+              hoverBackground='none'
+              hoverColor='none'
+            >
               Djuret har fått mat
             </Button>
           ) : (
             <Button
-              background='green'
-              color='pink'
               onClick={() => {
                 dispatch(feedAnimal(animal.id));
                 setIsFed(true);

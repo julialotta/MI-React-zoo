@@ -6,8 +6,8 @@ export const Header = () => {
     <FlexDiv
       height={"120px"}
       background={"#8b9883"}
-      padding={"15px"}
       justify={"center"}
+      width={"100%"}
     >
       <StyledTopHeading>
         <Link to={"/"}>Lottas Zoo</Link>

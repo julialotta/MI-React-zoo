@@ -20,13 +20,13 @@ export const Animals = () => {
       {animals.map((animal) => {
         return (
           <FlexDiv
-            width={"25%"}
-            height={"400px"}
+            width={"30%"}
+            height={"450px"}
             dir={"column"}
             background={"#8b9883"}
             key={animal.id}
             margin={"5px"}
-            padding={"25px"}
+            padding={"40px 20px"}
             borderRad={"5px"}
             justify={"start"}
           >
