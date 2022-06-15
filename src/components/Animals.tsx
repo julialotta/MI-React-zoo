@@ -20,7 +20,7 @@ export const Animals = () => {
       {animals.map((animal) => {
         return (
           <FlexDiv
-            width={"30%"}
+            width={"27%"}
             height={"450px"}
             dir={"column"}
             background={"#8b9883"}

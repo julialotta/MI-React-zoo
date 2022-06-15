@@ -10,3 +10,7 @@ export interface IAnimal {
   isFed: boolean;
   lastFed: string;
 }
+export interface IHungryAnimal {
+  id: number;
+  name: string;
+}

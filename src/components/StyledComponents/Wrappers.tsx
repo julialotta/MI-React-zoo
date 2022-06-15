@@ -1,33 +1,21 @@
 import styled from "styled-components";
 import { colors } from "./Mixins";
-
-interface IFlexDivProps {
-  dir?: string;
-  align?: string;
-  justify?: string;
-  wrap?: string;
-  background?: string;
-  width?: string;
-  height?: string;
-  gap?: string;
-  margin?: string;
-  padding?: string;
-  borderRad?: string;
-}
+import { IStylingProps } from "./StyledInterfaces";
 
 export const FlexDiv = styled.div`
   display: flex;
-  flex-direction: ${(props: IFlexDivProps) => props.dir || "row"};
-  align-items: ${(props: IFlexDivProps) => props.align || "center"};
-  justify-content: ${(props: IFlexDivProps) => props.justify || "center"};
-  flex-wrap: ${(props: IFlexDivProps) => props.wrap || "nowrap"};
-  background-color: ${(props: IFlexDivProps) => props.background || "none"};
-  width: ${(props: IFlexDivProps) => props.width || "100%"};
-  height: ${(props: IFlexDivProps) => props.height || "100%"};
-  gap: ${(props: IFlexDivProps) => props.gap || "0"};
-  margin: ${(props: IFlexDivProps) => props.margin || "0"};
-  padding: ${(props: IFlexDivProps) => props.padding || "0"};
-  border-radius: ${(props: IFlexDivProps) => props.borderRad || "0"};
+  flex-direction: ${(props: IStylingProps) => props.dir || "row"};
+  align-items: ${(props: IStylingProps) => props.align || "center"};
+  justify-content: ${(props: IStylingProps) => props.justify || "center"};
+  flex-wrap: ${(props: IStylingProps) => props.wrap || "nowrap"};
+  background-color: ${(props: IStylingProps) => props.background || "none"};
+  width: ${(props: IStylingProps) => props.width || "100%"};
+  min-width: ${(props: IStylingProps) => props.maxWidth || ""};
+  height: ${(props: IStylingProps) => props.height || "100%"};
+  gap: ${(props: IStylingProps) => props.gap || "0"};
+  margin: ${(props: IStylingProps) => props.margin || "0"};
+  padding: ${(props: IStylingProps) => props.padding || "0"};
+  border-radius: ${(props: IStylingProps) => props.borderRad || "0"};
 `;
 
 export const AppWrapper = styled.div`

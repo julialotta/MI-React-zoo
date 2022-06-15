@@ -1,31 +1,22 @@
 import styled from "styled-components";
 import { colors } from "./Mixins";
-
-interface IButtonProps {
-  color?: string;
-  background?: string;
-  margin?: string;
-  width?: string;
-  height?: string;
-  hover?: string;
-  hoverBackground?: string;
-  hoverColor?: string;
-}
+import { IStylingProps } from "./StyledInterfaces";
 
 export const Button = styled.button`
-  color: ${(props: IButtonProps) => props.color || colors.GreyLight};
-  background-color: ${(props: IButtonProps) =>
+  color: ${(props: IStylingProps) => props.color || colors.GreyLight};
+  background-color: ${(props: IStylingProps) =>
     props.background || colors.GreenVeryDark};
-  margin: ${(props: IButtonProps) => props.margin || "10px"};
-  width: ${(props: IButtonProps) => props.width || "130px"};
-  height: ${(props: IButtonProps) => props.height || "40px"};
+  margin: ${(props: IStylingProps) => props.margin || "10px"};
+  width: ${(props: IStylingProps) => props.width || "130px"};
+  height: ${(props: IStylingProps) => props.height || "40px"};
   border: none;
   border-radius: 5px;
   font-family: "Mukta", sans-serif;
   :hover {
-    background-color: ${(props: IButtonProps) =>
+    background-color: ${(props: IStylingProps) =>
       props.hoverBackground || colors.GreyLight};
-    color: ${(props: IButtonProps) => props.hoverColor || colors.GreenVeryDark};
-    cursor: ${(props: IButtonProps) => props.hover || "pointer"};
+    color: ${(props: IStylingProps) =>
+      props.hoverColor || colors.GreenVeryDark};
+    cursor: ${(props: IStylingProps) => props.hover || "pointer"};
   }
 `;

@@ -29,18 +29,19 @@ export const SingleAnimal = () => {
     lastFed: "",
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [animals, setAnimals] = useState<IAnimal[]>([]);
-  const [isFed, setIsFed] = useState(false);
-  const [seconds, setSeconds] = useState(0);
-  const [mins, setMins] = useState(0);
-  const [hours, setHours] = useState(0);
-  const [days, setDays] = useState(0);
+  const [timerTime, setTimerTime] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [fetchedFromAPI, setFetchedFromAPI] = useState(false);
 
   const params = useParams();
   const dispatch = useDispatch();
-  let interval: NodeJS.Timer;
   Modal.setAppElement("#root");
+  let interval: NodeJS.Timer;
 
   useEffect(() => {
     let storedAnimals: IAnimal[] = getList<IAnimal>();
@@ -48,9 +49,9 @@ export const SingleAnimal = () => {
       axios
         .get<IAnimal[]>("https://animals.azurewebsites.net/api/animals")
         .then((response) => {
-          setAnimals(response.data);
+          dispatch(set(response.data));
+          setFetchedFromAPI(true);
         });
-      dispatch(set(animals));
     } else if (storedAnimals.length > 0) {
       for (let i = 0; i < storedAnimals.length; i++) {
         if (storedAnimals[i].id.toString() === params.id) {
@@ -59,17 +60,15 @@ export const SingleAnimal = () => {
         }
       }
     }
-  }, [isFed, animals]);
+  }, [fetchedFromAPI]);
 
   useEffect(() => {
     const now = new Date();
     const lastFedDate = new Date(animal.lastFed);
     const timeSpan = now.getTime() - lastFedDate.getTime();
     const hour = 1000 * 60 * 60;
-
     if (timeSpan > hour * 3) {
       dispatch(unFeedAnimal(animal.id));
-      setIsFed(false);
     }
     if (timeSpan > hour * 4) {
       setIsOpen(true);
@@ -85,10 +84,7 @@ export const SingleAnimal = () => {
     const minutes = Math.floor((timeSpan % hour) / minute);
     const hours = Math.floor((timeSpan % day) / hour);
     const days = Math.floor(timeSpan / (1000 * 60 * 60 * 24));
-    setMins(minutes);
-    setSeconds(seconds);
-    setHours(hours);
-    setDays(days);
+    setTimerTime({ days, hours, minutes, seconds });
   }
   interval = setInterval(setTimer, 1000);
 
@@ -102,10 +98,14 @@ export const SingleAnimal = () => {
     setIsOpen(false);
   }
   function feedSingleAnimal() {
-    setIsFed(true);
-    dispatch(feedAnimal(animal.id));
-    setIsOpen(false);
+    setAnimal((animal) => ({
+      ...animal,
+      isFed: true,
+      lastFed: new Date().toLocaleString(),
+    }));
     clearInterval(interval);
+    setIsOpen(false);
+    dispatch(feedAnimal(animal.id));
   }
 
   return (
@@ -138,6 +138,7 @@ export const SingleAnimal = () => {
               <StyledHeadingh3>
                 Hej, jag heter {animal.name} och jag är hungrig!
               </StyledHeadingh3>
+              <StyledP>Det var med än 4 timmar sedan någon matade mig</StyledP>
               <Button
                 hoverBackground='#6b7b5d'
                 hoverColor='#d6d3d1'
@@ -172,8 +173,8 @@ export const SingleAnimal = () => {
             Fick senast mat: {new Date(animal.lastFed).toLocaleString()}
           </StyledP>
           <StyledP>
-            Tid sedan mat: {days} dagar, {hours} timmar, {mins} minuter och{" "}
-            {seconds} sekunder.
+            Tid sedan mat: {timerTime.days} dagar, {timerTime.hours} timmar,{" "}
+            {timerTime.minutes} minuter och {timerTime.seconds} sekunder.
           </StyledP>
           <StyledP>Latin: {animal.latinName}</StyledP>
 

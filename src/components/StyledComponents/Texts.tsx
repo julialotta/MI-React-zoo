@@ -1,9 +1,6 @@
 import styled from "styled-components";
 import { colors } from "./Mixins";
-
-interface IPProps {
-  margin?: string;
-}
+import { IStylingProps } from "./StyledInterfaces";
 
 export const StyledTopHeading = styled.h1`
   a {
@@ -35,13 +32,14 @@ export const StyledP = styled.p`
   font-family: "Mukta", sans-serif;
   text-align: center;
   line-height: 22px;
-  margin: ${(props: IPProps) => props.margin || "5px"};
+  margin: ${(props: IStylingProps) => props.margin || "5px"};
 `;
 
 export const StyledLinkDiv = styled.div`
   a {
-    font-size: 40px;
-    font-family: "Bebas Neue", cursive;
+    font-size: ${(props: IStylingProps) => props.fontSize || "40px"};
+    font-family: ${(props: IStylingProps) =>
+      props.font || "Bebas Neue, cursive"};
     color: ${colors.GreyLight};
     text-decoration: none;
   }
