@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 
 export const Home = () => {
   const [animals, setAnimals] = useState<IAnimal[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [hungryAnimals, setHungryAnimals] = useState<IHungryAnimal[]>([]);
   const [modalIsOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
@@ -30,13 +30,14 @@ export const Home = () => {
         .get<IAnimal[]>("https://animals.azurewebsites.net/api/animals")
         .then((response) => {
           setAnimals(response.data);
-          setIsLoaded(true);
+          setIsLoading(false);
         });
       dispatch(set(animals));
     } else {
       setAnimals(LSAnimals);
+      setIsLoading(false);
     }
-  }, [isLoaded]);
+  }, []);
 
   useEffect(() => {
     const now = new Date();
@@ -51,69 +52,84 @@ export const Home = () => {
         setIsOpen(true);
       }
     }
-  }, [animals, isLoaded]);
+  }, [animals, isLoading]);
 
   function closeModal() {
     setIsOpen(false);
   }
   return (
     <>
-      <FlexDiv dir='column' width='100%'>
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          style={customStyles}
-          contentLabel='Example Modal'
-        >
-          <FlexDiv
-            dir='column'
-            height='70vh'
-            justify='start'
-            align='center'
-            width='100%'
+      {isLoading ? (
+        <FlexDiv height='50vh' align={"start"}>
+          <StyledP>Laddar...</StyledP>
+        </FlexDiv>
+      ) : (
+        <>
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            style={customStyles}
+            contentLabel='Example Modal'
           >
-            <Button
-              width='90px'
-              hoverBackground='#6b7b5d'
-              hoverColor='none'
-              onClick={closeModal}
+            <FlexDiv
+              dir='column'
+              height='70vh'
+              justify='start'
+              align='center'
+              width='100%'
             >
-              ✕
-            </Button>
-            <StyledHeadingh3>Vi är hungriga!</StyledHeadingh3>
-            <StyledP>Klicka på oss för att ge oss mat</StyledP>
-            <FlexDiv padding='30px' dir={"column"}>
-              {hungryAnimals.map((hungryAnimal) => {
-                return (
-                  <FlexDiv
-                    width={"130px"}
-                    height={"min-content"}
-                    background={"#8b9883"}
-                    key={hungryAnimal.id}
-                    margin={"0 0 10px 0"}
-                    padding={"2px"}
-                    borderRad={"5px"}
-                    justify={"center"}
-                  >
-                    <StyledLinkDiv
+              <Button
+                width='90px'
+                hoverBackground='#6b7b5d'
+                hoverColor='none'
+                onClick={closeModal}
+              >
+                ✕
+              </Button>
+              <StyledHeadingh3>Vi är hungriga!</StyledHeadingh3>
+              <StyledP>
+                Det var mer än fyra timmar sen vi fick mat... Klicka på oss för
+                att mata oss.
+              </StyledP>
+              <FlexDiv
+                gap={"10px"}
+                dir={"column"}
+                justify={"start"}
+                padding={"0 0 20px 0"}
+              >
+                {hungryAnimals.map((hungryAnimal) => {
+                  return (
+                    <FlexDiv
+                      width={"130px"}
+                      height={"min-content"}
+                      background={"#8b9883"}
                       key={hungryAnimal.id}
-                      font='Mukta, sans-serif'
-                      fontSize='20px'
+                      padding={"2px"}
+                      margin={"3px"}
+                      borderRad={"5px"}
+                      justify={"center"}
                     >
-                      <Link to={`/animals/${hungryAnimal.id}`}>
-                        {hungryAnimal.name}
-                      </Link>
-                    </StyledLinkDiv>
-                  </FlexDiv>
-                );
-              })}
+                      <StyledLinkDiv
+                        key={hungryAnimal.id}
+                        font='Mukta, sans-serif'
+                        fontSize='20px'
+                      >
+                        <Link to={`/animals/${hungryAnimal.id}`}>
+                          {hungryAnimal.name}
+                        </Link>
+                      </StyledLinkDiv>
+                    </FlexDiv>
+                  );
+                })}
+              </FlexDiv>
             </FlexDiv>
+          </Modal>
+          <FlexDiv dir='column' width='100%'>
+            <StyledHeadingh3>Våra djur</StyledHeadingh3>
+            <Animals />
           </FlexDiv>
-        </Modal>
-
-        <StyledHeadingh3>Våra djur</StyledHeadingh3>
-        <Animals />
-      </FlexDiv>
+        </>
+      )}
     </>
   );
 };

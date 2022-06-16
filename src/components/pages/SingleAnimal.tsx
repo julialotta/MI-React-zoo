@@ -3,7 +3,6 @@ import { IAnimal } from "../../models/IAnimal";
 import { useState, useEffect } from "react";
 import { Button } from "../StyledComponents/Button";
 import { StyledImage } from "../StyledComponents/Images";
-import onErrorImg from "../../assets/OnError.png";
 import { useDispatch } from "react-redux";
 import { feedAnimal, unFeedAnimal } from "../../redux/features/AnimalSlice";
 import { getList } from "../../services/StorageService";
@@ -14,6 +13,7 @@ import { StyledP } from "../StyledComponents/Texts";
 import { FlexDiv } from "../StyledComponents/Wrappers";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import Modal from "react-modal";
+import { imageOnErrorHandler } from "../../services/Helpers";
 
 export const SingleAnimal = () => {
   const [animal, setAnimal] = useState<IAnimal>({
@@ -36,7 +36,6 @@ export const SingleAnimal = () => {
     seconds: 0,
   });
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [fetchedFromAPI, setFetchedFromAPI] = useState(false);
 
   const params = useParams();
   const dispatch = useDispatch();
@@ -50,7 +49,6 @@ export const SingleAnimal = () => {
         .get<IAnimal[]>("https://animals.azurewebsites.net/api/animals")
         .then((response) => {
           dispatch(set(response.data));
-          setFetchedFromAPI(true);
         });
     } else if (storedAnimals.length > 0) {
       for (let i = 0; i < storedAnimals.length; i++) {
@@ -60,58 +58,52 @@ export const SingleAnimal = () => {
         }
       }
     }
-  }, [fetchedFromAPI]);
+  }, []);
 
   useEffect(() => {
-    const now = new Date();
-    const lastFedDate = new Date(animal.lastFed);
-    const timeSpan = now.getTime() - lastFedDate.getTime();
-    const hour = 1000 * 60 * 60;
-    if (timeSpan > hour * 3) {
+    const timeSpan = new Date().getTime() - new Date(animal.lastFed).getTime();
+    if (timeSpan > 1000 * 60 * 60 * 3) {
       dispatch(unFeedAnimal(animal.id));
     }
-    if (timeSpan > hour * 4) {
+    if (timeSpan > 1000 * 60 * 60 * 4) {
       setIsOpen(true);
     }
-  }, [animal]);
+  }, [animal, isLoading]);
 
   function setTimer() {
     const timeSpan = new Date().getTime() - new Date(animal.lastFed).getTime();
-    const minute = 1000 * 60;
-    const hour = minute * 60;
-    const day = hour * 24;
-    const seconds = Math.floor((timeSpan % minute) / 1000);
-    const minutes = Math.floor((timeSpan % hour) / minute);
-    const hours = Math.floor((timeSpan % day) / hour);
-    const days = Math.floor(timeSpan / (1000 * 60 * 60 * 24));
+    let seconds = Math.floor(timeSpan / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+    let days = Math.floor(hours / 24);
+    hours = hours - days * 24;
+    minutes = minutes - days * 24 * 60 - hours * 60;
+    seconds = seconds - days * 24 * 60 * 60 - hours * 60 * 60 - minutes * 60;
     setTimerTime({ days, hours, minutes, seconds });
   }
   interval = setInterval(setTimer, 1000);
 
-  const imageOnErrorHandler = (
-    event: React.SyntheticEvent<HTMLImageElement, Event>
-  ) => {
-    event.currentTarget.src = onErrorImg;
-  };
-
-  function closeModal() {
-    setIsOpen(false);
-  }
   function feedSingleAnimal() {
+    clearInterval(interval);
     setAnimal((animal) => ({
       ...animal,
       isFed: true,
       lastFed: new Date().toLocaleString(),
     }));
-    clearInterval(interval);
-    setIsOpen(false);
     dispatch(feedAnimal(animal.id));
+    setIsOpen(false);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
   }
 
   return (
     <>
       {isLoading ? (
-        <>Laddar...</>
+        <FlexDiv height='50vh' align={"start"}>
+          <StyledP>Laddar...</StyledP>
+        </FlexDiv>
       ) : (
         <FlexDiv dir='column' width='70%'>
           <Modal
