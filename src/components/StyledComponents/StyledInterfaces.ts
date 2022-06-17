@@ -1,20 +1,20 @@
 export interface IStylingProps {
-  margin?: string;
-  font?: string;
-  fontSize?: string;
-  color?: string;
-  background?: string;
-  width?: string;
-  height?: string;
-  hover?: string;
-  hoverBackground?: string;
   dir?: string;
-  hoverColor?: string;
   align?: string;
   justify?: string;
   wrap?: string;
+  background?: string;
+  color?: string;
+  height?: string;
+  width?: string;
   maxWidth?: string;
+  margin?: string;
+  padding?: string;
+  font?: string;
+  fontSize?: string;
   gap?: string;
   borderRad?: string;
-  padding?: string;
+  hover?: string;
+  hoverColor?: string;
+  hoverBackground?: string;
 }

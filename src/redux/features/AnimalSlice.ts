@@ -24,6 +24,14 @@ const animalSlice = createSlice({
         save(state.value);
       }
     },
+    animalUnFeedTimer: (state) => {
+      for (let i = 0; i < state.value.length; i++) {
+        let difference =
+          (Date.now() - new Date(state.value[i].lastFed).getTime()) / 3600000;
+        if (difference > 3) state.value[i].isFed = false;
+        save(state.value);
+      }
+    },
 
     set: (state, action: IAction<IAnimal[]>) => {
       state.value = action.payload;

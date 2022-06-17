@@ -14,6 +14,8 @@ import { IAnimal, IHungryAnimal } from "../../models/IAnimal";
 import Modal from "react-modal";
 import { Button } from "../StyledComponents/Button";
 import { Link } from "react-router-dom";
+import { getLastFedTimeSpan } from "../../services/Helpers";
+import { ModalStyling } from "../StyledComponents/Styling/ModalStyling";
 
 export const Home = () => {
   const [animals, setAnimals] = useState<IAnimal[]>([]);
@@ -40,12 +42,10 @@ export const Home = () => {
   }, []);
 
   useEffect(() => {
-    const now = new Date();
-    const hour = 1000 * 60 * 60;
     let newArr = [...hungryAnimals];
     for (let i = 0; i < animals.length; i++) {
-      const timeSpan = now.getTime() - new Date(animals[i].lastFed).getTime();
-      if (timeSpan > hour * 4) {
+      const timeSpan = getLastFedTimeSpan(animals[i]);
+      if (timeSpan > 4) {
         let newHungryAnimal = { id: animals[i].id, name: animals[i].name };
         newArr[i] = newHungryAnimal;
         setHungryAnimals(newArr);
@@ -68,7 +68,7 @@ export const Home = () => {
           <Modal
             isOpen={modalIsOpen}
             onRequestClose={closeModal}
-            style={customStyles}
+            style={ModalStyling}
             contentLabel='Example Modal'
           >
             <FlexDiv
@@ -132,20 +132,4 @@ export const Home = () => {
       )}
     </>
   );
-};
-
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: "#d6d3d1",
-    color: "#515d46",
-    border: "none",
-    width: "40%",
-    marginBottom: "30px",
-  },
 };

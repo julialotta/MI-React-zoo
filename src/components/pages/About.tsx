@@ -8,7 +8,8 @@ export const About = () => {
       <StyledP>
         Hej och välkomna till Lottas Zoo! Här finns en fin liten blandning med
         djur som alla är välkomna att hjälpas åt att mata. Alla djur behöver mat
-        var tredje timme.
+        var tredje timme. När något djur inte fått mat på mer än fyra timmer så
+        dyker det upp en varning.
       </StyledP>
     </FlexDiv>
   );

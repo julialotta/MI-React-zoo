@@ -13,8 +13,12 @@ import { StyledP } from "../StyledComponents/Texts";
 import { FlexDiv } from "../StyledComponents/Wrappers";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import Modal from "react-modal";
-import { imageOnErrorHandler } from "../../services/Helpers";
+import {
+  getLastFedTimeSpan,
+  imageOnErrorHandler,
+} from "../../services/Helpers";
 import { IState } from "../../redux/models/IState";
+import { ModalStyling } from "../StyledComponents/Styling/ModalStyling";
 
 export const SingleAnimal = () => {
   const [animal, setAnimal] = useState<IAnimal>({
@@ -56,11 +60,11 @@ export const SingleAnimal = () => {
   }, [reduxAnimals]);
 
   useEffect(() => {
-    const timeSpan = new Date().getTime() - new Date(animal.lastFed).getTime();
-    if (timeSpan > 1000 * 60 * 60 * 3) {
+    const timeSpan = getLastFedTimeSpan(animal);
+    if (timeSpan > 3) {
       dispatch(unFeedAnimal(animal.id));
     }
-    if (timeSpan > 1000 * 60 * 60 * 4) {
+    if (timeSpan > 4) {
       setIsOpen(true);
     }
   }, [animal, isLoading]);
@@ -90,7 +94,7 @@ export const SingleAnimal = () => {
           <Modal
             isOpen={modalIsOpen}
             onRequestClose={closeModal}
-            style={customStyles}
+            style={ModalStyling}
             contentLabel='Example Modal'
           >
             <FlexDiv
@@ -165,19 +169,4 @@ export const SingleAnimal = () => {
       )}
     </>
   );
-};
-
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: "#d6d3d1",
-    color: "#515d46",
-    border: "none",
-    padding: "40px",
-  },
 };
