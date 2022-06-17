@@ -3,7 +3,7 @@ import { IAnimal } from "../../models/IAnimal";
 import { useState, useEffect } from "react";
 import { Button } from "../StyledComponents/Button";
 import { StyledImage } from "../StyledComponents/Images";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { feedAnimal, unFeedAnimal } from "../../redux/features/AnimalSlice";
 import { getList } from "../../services/StorageService";
 import axios from "axios";
@@ -14,6 +14,7 @@ import { FlexDiv } from "../StyledComponents/Wrappers";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import Modal from "react-modal";
 import { imageOnErrorHandler } from "../../services/Helpers";
+import { IState } from "../../redux/models/IState";
 
 export const SingleAnimal = () => {
   const [animal, setAnimal] = useState<IAnimal>({
@@ -29,18 +30,12 @@ export const SingleAnimal = () => {
     lastFed: "",
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [timerTime, setTimerTime] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
   const [modalIsOpen, setIsOpen] = useState(false);
 
   const params = useParams();
   const dispatch = useDispatch();
+  const reduxAnimals = useSelector((state: IState) => state.animals.value);
   Modal.setAppElement("#root");
-  let interval: NodeJS.Timer;
 
   useEffect(() => {
     let storedAnimals: IAnimal[] = getList<IAnimal>();
@@ -58,7 +53,7 @@ export const SingleAnimal = () => {
         }
       }
     }
-  }, []);
+  }, [reduxAnimals]);
 
   useEffect(() => {
     const timeSpan = new Date().getTime() - new Date(animal.lastFed).getTime();
@@ -70,21 +65,7 @@ export const SingleAnimal = () => {
     }
   }, [animal, isLoading]);
 
-  function setTimer() {
-    const timeSpan = new Date().getTime() - new Date(animal.lastFed).getTime();
-    let seconds = Math.floor(timeSpan / 1000);
-    let minutes = Math.floor(seconds / 60);
-    let hours = Math.floor(minutes / 60);
-    let days = Math.floor(hours / 24);
-    hours = hours - days * 24;
-    minutes = minutes - days * 24 * 60 - hours * 60;
-    seconds = seconds - days * 24 * 60 * 60 - hours * 60 * 60 - minutes * 60;
-    setTimerTime({ days, hours, minutes, seconds });
-  }
-  interval = setInterval(setTimer, 1000);
-
   function feedSingleAnimal() {
-    clearInterval(interval);
     setAnimal((animal) => ({
       ...animal,
       isFed: true,
@@ -164,10 +145,7 @@ export const SingleAnimal = () => {
           <StyledP>
             Fick senast mat: {new Date(animal.lastFed).toLocaleString()}
           </StyledP>
-          <StyledP>
-            Tid sedan mat: {timerTime.days} dagar, {timerTime.hours} timmar,{" "}
-            {timerTime.minutes} minuter och {timerTime.seconds} sekunder.
-          </StyledP>
+
           <StyledP>Latin: {animal.latinName}</StyledP>
 
           {animal.isFed ? (

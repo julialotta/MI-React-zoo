@@ -97,7 +97,7 @@ export const Home = () => {
                 justify={"start"}
                 padding={"0 0 20px 0"}
               >
-                {hungryAnimals.map((hungryAnimal) => {
+                {hungryAnimals?.map((hungryAnimal) => {
                   return (
                     <FlexDiv
                       width={"130px"}

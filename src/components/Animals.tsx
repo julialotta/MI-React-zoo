@@ -1,23 +1,17 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import onErrorImg from "../assets/OnError.png";
 import { StyledImage } from "./StyledComponents/Images";
 import { FlexDiv } from "./StyledComponents/Wrappers";
 import { IState } from "../redux/models/IState";
 import { StyledLinkDiv, StyledP } from "./StyledComponents/Texts";
+import { imageOnErrorHandler } from "../services/Helpers";
 
 export const Animals = () => {
   const animals = useSelector((state: IState) => state.animals.value);
 
-  const imageOnErrorHandler = (
-    event: React.SyntheticEvent<HTMLImageElement, Event>
-  ) => {
-    event.currentTarget.src = onErrorImg;
-  };
-
   return (
     <FlexDiv wrap={"wrap"} gap={"20px"} width={"100%"}>
-      {animals.map((animal) => {
+      {animals?.map((animal) => {
         return (
           <FlexDiv
             width={"27%"}
